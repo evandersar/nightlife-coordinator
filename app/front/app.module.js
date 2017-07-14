@@ -20,9 +20,15 @@
         };
 
         function addPoll(pollObj) {
-            Poll.save(pollObj, function () {
-				console.log("poll saved");
-			});
+            Poll.save(
+                pollObj, 
+                function (resp) {
+    				console.log(resp);
+    			},
+    			function(err){
+    			    console.log(err);
+                }
+            );
         }
     }
     

@@ -1,12 +1,21 @@
 'use strict';
 
 function PollsHandler (db) {
-	//var polls = db.collection('polls');
+	var polls = db.collection('polls');
 	
 	this.addPoll = function (req, res) {
-	    var bod = req.body;
-		console.log("bod", bod);
-		res.json(bod);
+	    var poll = req.body;
+		//console.log("bod", bod);
+		//res.json(bod);
+    
+	    polls.insert(poll, function(err, data) {
+	      if (err) throw err;
+	      console.log(JSON.stringify(poll));
+	      db.close();
+	      
+	      res.writeHead(200, { 'Content-Type': 'text/json' });
+	      res.end(JSON.stringify( {id: poll['_id']} ));
+	    });
 	};
 		
 		/*polls
