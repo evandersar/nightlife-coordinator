@@ -2,7 +2,7 @@
 
 (function () {
 	angular
-		.module('clementineApp', ['ngResource'])
+		.module('votingApp', ['ngResource'])
 		.controller('clickController',
 			['$scope',
 			'$resource',

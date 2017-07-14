@@ -1,0 +1,20 @@
+<div class="row" ng-controller="NewPollController as vm">
+    
+    <h2>Here you can create a New poll</h2><br>
+    
+    <form>
+      <div class="form-group">
+        <label for="title">Title of your poll</label>
+        <input type="text" class="form-control" id="title" ng-model="vm.poll.title">
+      </div>
+      
+      <div class="form-group">
+        <label>Options</label>
+        <input type="text" class="form-control option" ng-repeat="option in vm.poll.options track by $index" ng-model="option.value">
+      </div>
+      
+      <button type="button" class="btn btn-success" ng-click="vm.addPollOption()">Add option</button>
+      <button type="button" class="btn btn-primary" ng-click="vm.savePoll()">Save poll</button>
+    </form>
+    
+</div>

@@ -1,35 +1,63 @@
 <!DOCTYPE html>
 
-<html ng-app="clementineApp">
+<html ng-app="app">
 	<head>
-		<title>Clementine.js - MEAN stack application</title>
+		<base href="/">
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+		<title>Voting APP</title>
 		
-		<link href="http://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet" type="text/css">
-		<link href="/public/css/main.css" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		
+		<link href="/public/css/main.css" rel="stylesheet" type="text/css">
 	</head>
 
-	<body>
-		<div class="container">
-			<img src="/public/img/clementine_150.png" />
-			<br />
-			<p class="clementine-text">Clementine.js</p>
+	<body ng-controller="MainController">
+		
+		<nav class="navbar navbar-default navbar-fixed-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" ui-sref="home">Voting APP</a>
+	        </div>
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav navbar-right">
+	            <li><a ui-sref="home" ui-sref-active="active-route">Home</a></li>
+	            <li><a ui-sref="mypolls" ui-sref-active="active-route">My Polls</a></li>
+	            <li><a ui-sref="newpoll" ui-sref-active="active-route">New Poll</a></li>
+	            <li><button type="button" class="btn btn-primary btn-default btn-block" style="margin-top: 7px;width: 95%;">Sign in with GitHub</button></li>
+	          </ul>
+	        </div><!--/.nav-collapse -->
+	      </div>
+	    </nav>
+	    
+		
+		<div class="container" style="margin-top: 51px">
+			<ui-view>
+				<i>App is loading...</i>
+			</ui-view>
 		</div>
-
-		<div class="container" ng-controller="clickController">
-			<p>You have clicked the button {{ clicks }} times.</p>
-			<br />
-			<div class="btn-container">
-				<button type="submit" ng-click="addClick()" class="btn">CLICK ME!</button>
-				<button ng-click="resetClicks()" class="btn btn-delete">RESET</button>
-			</div>
-		</div>
+		
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.6.4/angular-resource.min.js"></script>
-		<script type="text/javascript" src="controllers/clickController.client.js"></script>
+		<script src="//unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
+		<script type="text/javascript" src="front/app.module.js"></script>
+		<script type="text/javascript" src="front/controllers/home.ctrl.js"></script>
+		<script type="text/javascript" src="front/controllers/mypolls.ctrl.js"></script>
+		<script type="text/javascript" src="front/controllers/newpoll.ctrl.js"></script>
+		<!--<script type="text/javascript" src="controllers/clickController.client.js"></script>
+		<script type="text/javascript" src="controllers/routingModule.js"></script>-->
 	</body>
 
 </html>

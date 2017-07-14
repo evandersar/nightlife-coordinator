@@ -1,8 +1,10 @@
 'use strict';
 
 var express = require('express');
-var routes = require('./app/routes/index.js');
 var mongo = require('mongodb').MongoClient;
+var bodyParser = require('body-parser');
+
+var routes = require('./app/routes/index.js');
 
 var app = express();
 
@@ -13,9 +15,13 @@ mongo.connect('mongodb://localhost:27017/clementinejs', function (err, db) {
 	} else {
 		console.log('MongoDB successfully connected on port 27017.');
 	}
-
+	
+	app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({extended: true}));
+	
 	app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
 	app.use('/public', express.static(process.cwd() + '/public'));
+	app.use('/front', express.static(process.cwd() + '/app/front'));
 
 	routes(app, db);
 
