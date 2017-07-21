@@ -11,11 +11,41 @@ function PollsHandler (db) {
 	    polls.insert(poll, function(err, data) {
 	      if (err) throw err;
 	      console.log(JSON.stringify(poll));
-	      db.close();
 	      
 	      res.writeHead(200, { 'Content-Type': 'text/json' });
 	      res.end(JSON.stringify( {id: poll['_id']} ));
 	    });
+	};
+	
+	this.getPolls = function (req, res) {
+		
+	    polls.find(
+	    	{},
+	    	{ title: 1 }
+	    ).toArray(function(err, data) {
+		      if (err) throw err;
+		      //console.log("getPolls => ", data);
+		      
+		      res.writeHead(200, { 'Content-Type': 'text/json' });
+		      res.end(JSON.stringify( data ));
+		});
+	};
+	
+	this.getPollById = function (req, res) {
+		
+		var pollId = req.params.id;
+		
+		console.log("pollId => ", pollId);
+    
+	    polls.find(
+	    	{ _id: require('mongodb').ObjectID(pollId) }
+	    ).toArray(function(err, data) {
+		      if (err) throw err;
+		      console.log("getPollById => ", data[0]);
+		      
+		      res.writeHead(200, { 'Content-Type': 'text/json' });
+		      res.end(JSON.stringify( data[0] ));
+		});
 	};
 		
 		/*polls

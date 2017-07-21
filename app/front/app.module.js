@@ -13,15 +13,45 @@
     
     function restService($resource) {
 
-        var Poll = $resource('/api/polls');
+        var Poll = $resource( 
+            '/api/polls/:id', 
+            {id:'@id'}, 
+            {"update": {method: "PUT"} }
+        );
         
         return {
-            addPoll: addPoll
+            addPoll: addPoll,
+            getPolls: getPolls,
+            getPollById: getPollById
         };
 
         function addPoll(pollObj) {
-            Poll.save(
+            return Poll.save(
                 pollObj, 
+                function (resp) {
+    				console.log(resp);
+    			},
+    			function(err){
+    			    console.log(err);
+                }
+            );
+        }
+        
+        function getPolls() {
+            return Poll.query(
+                function (resp) {
+    				console.log(resp);
+    			},
+    			function(err){
+    			    console.log(err);
+                }
+            );
+        }
+        
+        function getPollById(id) {
+            return Poll.get(
+                {},
+                {id: id},
                 function (resp) {
     				console.log(resp);
     			},
@@ -45,22 +75,25 @@
             {
                 name: 'home',
                 url: '/home',
-                templateUrl: 'front/views/home.html',
-                controller: 'HomeController'
+                templateUrl: 'front/views/home.html'
             },
             
             {
                 name: 'mypolls',
                 url: '/mypolls',
-                templateUrl: 'front/views/mypolls.html',
-                controller: 'MyPollsController'
+                templateUrl: 'front/views/mypolls.html'
             },
             
             {
                 name: 'newpoll',
                 url: '/newpoll',
-                templateUrl: 'front/views/newpoll.html',
-                controller: 'NewPollController'
+                templateUrl: 'front/views/newpoll.html'
+            },
+            
+            {
+                name: 'poll',
+                url: '/poll/:id',
+                templateUrl: 'front/views/poll.html'
             },
         ];
         

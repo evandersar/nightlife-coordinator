@@ -14,11 +14,15 @@ module.exports = function (app, db) {
 		.post(clickHandler.addClick)
 		.delete(clickHandler.resetClicks);*/
 		
+	
+	
 	app.route('/api/polls')
-		.post(pollsHandler.addPoll);
-		/*.get(pollsHandler.getPolls)*/
+		.post(pollsHandler.addPoll)
+		.get(pollsHandler.getPolls);
 		/*.delete(pollsHandler.removePoll);*/
 		
+	app.route('/api/polls/:id')
+		.get(pollsHandler.getPollById);	
 		
 	app.use(function(req, res) {
 	    res.sendFile(path + '/public/index.html');

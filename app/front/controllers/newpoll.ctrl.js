@@ -32,6 +32,8 @@
             restService.addPoll(vm.poll);
         }
         
+        
+        console.log("End of NewPollController");
     }
     
 })();

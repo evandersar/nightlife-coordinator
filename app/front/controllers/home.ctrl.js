@@ -4,10 +4,23 @@
     angular
         .module('app')
         .controller('HomeController', HomeController);
+        
+    HomeController.$inject = ["restService"];
     
-    function HomeController() { 
+    function HomeController(restService) { 
         var vm = this;
-        vm.title = "Home page!";
+        vm.polls = [];
+        
+        vm.getPolls = getPolls;
+        
+        function getPolls(){
+            vm.polls = restService.getPolls();
+            //console.log(restService.getPolls());
+        }
+        
+        vm.getPolls();
+        
+        console.log("End of HomeController");
     }
     
 })();
