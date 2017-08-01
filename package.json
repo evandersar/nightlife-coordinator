@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@uirouter/angularjs": "latest",
+    "angular-google-chart": "^1.0.0-beta.1",
     "body-parser": "^1.17.2",
     "express": "^4.12.4",
     "mongodb": "^2.0.33"

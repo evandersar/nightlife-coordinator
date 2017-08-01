@@ -38,8 +38,14 @@ body {
 	color: #212121;
 }
 
-/****** Options Styling ******/
+/****** Other Styling ******/
 
 .option{
 	margin: 5px 0;
+}
+
+.mychart{
+	height:400px; 
+	width:100%;
+	margin-top: 10px;
 }

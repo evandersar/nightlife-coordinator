@@ -34,7 +34,6 @@ function PollsHandler (db) {
 	this.getPollById = function (req, res) {
 		
 		var pollId = req.params.id;
-		
 		console.log("pollId => ", pollId);
     
 	    polls.find(
@@ -47,73 +46,71 @@ function PollsHandler (db) {
 		      res.end(JSON.stringify( data[0] ));
 		});
 	};
+	
+	this.updatePollById = function (req, res) {
 		
-		/*polls
-			.findAndModify(
-				{},
-				{ '_id': 1 },
-				{ $inc: { 'clicks': 1 } },
-				function (err, result) {
-					if (err) {
-						throw err;
+		var pollId = req.params.id;
+		var optionValue = req.body.option;
+		//console.log("pollId => ", pollId);
+		//console.log("optionValue => ", optionValue);
+		
+		polls.find(
+	    	{ _id: require('mongodb').ObjectID(pollId), "options.value" : optionValue }
+	    ).toArray(function(err, data) {
+		      if (err) throw err;
+		      console.log("updatePollById => ", data[0]);
+		      
+		      if (data[0]) {
+		      	polls.findAndModify(
+			    	{ _id: require('mongodb').ObjectID(pollId), "options.value" : optionValue },
+			    	[],
+			    	{ $inc: { 'options.$.votes': 1 } },
+			    	{ new : true },
+			    	function(err, doc) {
+			    		if (err) throw err;
+					    console.log("updated Poll => ", doc);
+					      
+					    res.writeHead(200, { 'Content-Type': 'text/json' });
+					    res.end(JSON.stringify( doc.value ));
 					}
-
-					res.json(result);
-				}
-			);
-	};*/
-
-	/*this.getClicks = function (req, res) {
-		clicks
-			.findOne(
-				{},
-				{ '_id': false },
-				function (err, result) {
-					if (err) {
-						throw err;
-					}
-
-					var clickResults = [];
-
-					if (result) {
-						clickResults.push(result);
-						res.json(clickResults);
-					} else {
-						clicks.insert({ 'clicks': 0 }, function (err) {
-							if (err) {
-								throw err;
-							}
-
-							clicks.findOne({}, {'_id': false}, function (err, doc) {
-								if (err) {
-									throw err;
-								}
-
-								clickResults.push(doc);
-								res.json(clickResults);
-							});
-
-						});
-
-					}
-				}
-			);
+			    );
+		      }
+		      else{
+		      	var option = { value: optionValue, votes: 1};
+		      	polls.findAndModify(
+		      		{ _id: require('mongodb').ObjectID(pollId) },
+		      		[],
+			    	{ $push: { options: option } },
+			    	{ new : true },
+			      	function(err, doc) {
+				      if (err) throw err;
+				      console.log("Poll with new option => ",doc.value);
+				      
+				      res.writeHead(200, { 'Content-Type': 'text/json' });
+				      res.end(JSON.stringify( doc.value ));
+				    }
+			    );
+		      }
+		});
+		
 	};
-
-	this.resetClicks = function (req, res) {
-		clicks
-			.update(
-				{},
-				{ 'clicks': 0 },
-				function (err, result) {
-					if (err) {
-						throw err;
-					}
-
-					res.json(result);
-				}
-			);
-	};*/
+	
+	this.deletePollById = function (req, res) {
+		
+		var pollId = req.params.id;
+		console.log("pollId => ", pollId);
+    
+	    polls.remove(
+	    	{ _id: require('mongodb').ObjectID(pollId) },
+		    function(err, result) {
+			      if (err) throw err;
+			      //console.log("deletePollById => ", result);
+			      
+			      res.writeHead(200, { 'Content-Type': 'text/json' });
+			      res.end(JSON.stringify( { _id: pollId } ));
+			}
+		);
+	};
 
 }
 

@@ -1,5 +1,32 @@
 <div class="row" ng-controller="PollController as vm">
     
-    <h2>{{vm.poll.title}}</h2><br>
+    <div class="col-md-5">
+        
+        <form>
+          
+          <h3>{{vm.poll.title}}</h3>
+          <div class="form-group">
+            <label for="pollOptions">Please select the answer :</label>
+            <select class="form-control" id="pollOptions" ng-model="vm.answer">
+                <option>--Select--</option>
+                <option ng-repeat="option in vm.poll.options" value="{{option.value}}">{{option.value}}</option>
+                <option ng-if="vm.authorized">Custom answer</option>
+            </select>
+          </div>
+          
+          <div class="form-group" ng-if="vm.answer === 'Custom answer'">
+            <label for="own">Add your own answer</label>
+            <input type="text" class="form-control" id="own" ng-model="vm.customAnswer">
+          </div>
+          
+          <button type="button" class="btn btn-primary" ng-click="vm.updatePoll()">Submit</button>
+          <button type="button" class="btn btn-danger" ng-click="vm.deletePoll()">Delete this Poll</button>
+        </form>
+    
+    </div>
+    
+    <div class="col-md-7">
+        <div google-chart chart="vm.myChartObject" class="mychart"></div>
+    </div>
     
 </div>

@@ -14,13 +14,20 @@
         vm.getPolls = getPolls;
         
         function getPolls(){
-            vm.polls = restService.getPolls();
-            //console.log(restService.getPolls());
+            restService.getPolls(
+                function(resp){
+                    vm.polls = resp;
+                },
+                function(err){
+                    console.log(err);
+                    alert(`${err.statusText} ${err.status}`);
+                }
+            );
         }
         
         vm.getPolls();
         
-        console.log("End of HomeController");
+        //console.log("End of HomeController");
     }
     
 })();

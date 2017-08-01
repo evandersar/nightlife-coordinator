@@ -2,13 +2,18 @@
     'use strict';
     
     angular
-        .module('app', ['ui.router', 'ngResource'])
+        .module('app', ['ui.router', 'ngResource', 'googlechart'])
         .config(routerConfig)
         .factory("restService", restService)
         .controller('MainController', MainController);
-        
     
     restService.$inject = ["$resource"];
+    
+    
+    function MainController() {
+        var vm = this;
+        vm.authorized = true;
+    }
     
     
     function restService($resource) {
@@ -22,48 +27,72 @@
         return {
             addPoll: addPoll,
             getPolls: getPolls,
-            getPollById: getPollById
+            getPollById: getPollById,
+            updatePoll: updatePoll,
+            deletePollById: deletePollById
         };
 
-        function addPoll(pollObj) {
+        function addPoll(pollObj, callback, errorCallback) {
             return Poll.save(
                 pollObj, 
                 function (resp) {
-    				console.log(resp);
+    				callback(resp);
     			},
     			function(err){
-    			    console.log(err);
+    			    errorCallback(err);
                 }
             );
         }
         
-        function getPolls() {
+        function getPolls(callback, errorCallback) {
             return Poll.query(
                 function (resp) {
-    				console.log(resp);
+    				callback(resp);
     			},
     			function(err){
-    			    console.log(err);
+    			    errorCallback(err);
                 }
             );
         }
         
-        function getPollById(id) {
+        function getPollById(id, callback, errorCallback) {
             return Poll.get(
                 {},
                 {id: id},
                 function (resp) {
-    				console.log(resp);
+    				callback(resp);
     			},
     			function(err){
-    			    console.log(err);
+    			    errorCallback(err);
                 }
             );
         }
-    }
-    
-    
-    function MainController() { 
+        
+        function updatePoll(id, option, callback, errorCallback) {
+            return Poll.update(
+                {id: id}, 
+                option,
+                function (resp) {
+    				callback(resp);
+    			},
+    			function(err){
+    			    errorCallback(err);
+                }
+            );
+        }
+        
+        function deletePollById(id, callback, errorCallback) {
+            return Poll.delete(
+                {},
+                {id: id},
+                function (resp) {
+    				callback(resp);
+    			},
+    			function(err){
+    			    errorCallback(err);
+                }
+            );
+        }
         
     }
     
@@ -104,5 +133,6 @@
         $urlRouterProvider.otherwise('/home');
       
     }
+    
     
 })();

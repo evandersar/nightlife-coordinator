@@ -5,9 +5,9 @@
         .module('app')
         .controller('NewPollController', NewPollController);
         
-    NewPollController.$inject = ["restService"];
+    NewPollController.$inject = ["restService", "$state"];
     
-    function NewPollController(restService) { 
+    function NewPollController(restService, $state) { 
         var vm = this;
         
         vm.addPollOption = addPollOption;
@@ -28,12 +28,22 @@
         }
         
         function savePoll(){
-            console.log(vm.poll);
-            restService.addPoll(vm.poll);
+            
+            restService.addPoll(
+                vm.poll,
+                function(resp){
+                    console.log(`Poll saved with id: ${resp.id}`);
+                    alert(`Poll saved with id: ${resp.id}`);
+                    $state.go('poll', {id: resp.id});
+                },
+                function(err){
+                    console.log(err);
+                    alert(`${err.statusText} ${err.status}`);
+                }
+            );
         }
         
-        
-        console.log("End of NewPollController");
+        //console.log("End of NewPollController");
     }
     
 })();
