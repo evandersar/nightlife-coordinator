@@ -13,8 +13,9 @@
         <input type="text" class="form-control option" ng-repeat="option in vm.poll.options track by $index" ng-model="option.value">
       </div>
       
-      <button type="button" class="btn btn-success" ng-click="vm.addPollOption()">Add option</button>
-      <button type="button" class="btn btn-primary" ng-click="vm.savePoll()">Save poll</button>
+      <button type="button" class="btn btn-success" ng-click="vm.savePoll()">Save poll</button>
+      <button type="button" class="btn btn-primary" ng-click="vm.addPollOption()">Add option</button>
+      <button type="button" class="btn btn-warning" ng-click="vm.removePollOption()">Remove option</button>
     </form>
     
 </div>

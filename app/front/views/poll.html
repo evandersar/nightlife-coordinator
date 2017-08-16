@@ -10,7 +10,7 @@
             <select class="form-control" id="pollOptions" ng-model="vm.answer">
                 <option>--Select--</option>
                 <option ng-repeat="option in vm.poll.options" value="{{option.value}}">{{option.value}}</option>
-                <option ng-if="vm.authorized">Custom answer</option>
+                <option ng-if="vm.authenticated">Custom answer</option>
             </select>
           </div>
           
@@ -19,8 +19,9 @@
             <input type="text" class="form-control" id="own" ng-model="vm.customAnswer">
           </div>
           
-          <button type="button" class="btn btn-primary" ng-click="vm.updatePoll()">Submit</button>
-          <button type="button" class="btn btn-danger" ng-click="vm.deletePoll()">Delete this Poll</button>
+          <button type="button" class="btn btn-success" ng-click="vm.updatePoll()">Submit</button>
+          <a ng-href="https://www.facebook.com/dialog/share?app_id=283756712103783&display=popup&href={{vm.pollURL}}&redirect_uri={{vm.redirectURL}}" ng-if="vm.isauthor" class="btn btn-primary">Share on Facebook</a>
+          <button ng-if="vm.isauthor" type="button" class="btn btn-danger" ng-click="vm.deletePoll()">Delete this Poll</button>
         </form>
     
     </div>

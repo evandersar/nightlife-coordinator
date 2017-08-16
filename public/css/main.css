@@ -19,7 +19,7 @@ body {
 	font-size: 14px;
 	border-radius: 3px;
 	padding: 10px 5px;
-	width: 100px;
+	min-width: 100px;
 	font-weight: 500;
 }
 

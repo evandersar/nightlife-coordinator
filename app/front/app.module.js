@@ -28,13 +28,19 @@
             {
                 name: 'mypolls',
                 url: '/mypolls',
-                templateUrl: 'front/views/mypolls.html'
+                templateUrl: 'front/views/mypolls.html',
+                resolve: {
+                    redirectIfNotAuthenticated: _redirectIfNotAuthenticated
+                }
             },
 
             {
                 name: 'newpoll',
                 url: '/newpoll',
-                templateUrl: 'front/views/newpoll.html'
+                templateUrl: 'front/views/newpoll.html',
+                resolve: {
+                    redirectIfNotAuthenticated: _redirectIfNotAuthenticated
+                }
             },
 
             {
@@ -43,6 +49,20 @@
                 templateUrl: 'front/views/poll.html'
             },
         ];
+
+        function _redirectIfNotAuthenticated($q, $state, $auth, $timeout, authService) {
+            var defer = $q.defer();
+            if (authService.isAuthenticated()) {
+                defer.resolve(); /* (3) */
+            }
+            else {
+                $timeout(function() {
+                    $state.go('home'); /* (4) */
+                });
+                defer.reject();
+            }
+            return defer.promise;
+        }
 
         states.forEach(function(state) {
             $stateProvider.state(state);

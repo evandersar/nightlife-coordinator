@@ -13,7 +13,7 @@
             isAuthenticated: isAuthenticated,
             authenticate: authenticate,
             logout: logout,
-            getUserName: getUserName
+            getPayload: getPayload
         };
         
         function isAuthenticated(){
@@ -28,9 +28,9 @@
             return $auth.logout();
         }
         
-        function getUserName() {
-            console.log('$auth.getPayload()["name"] => ', $auth.getPayload()["name"]);
-            return $auth.getPayload()["name"];
+        function getPayload() {
+            console.log('$auth.getPayload() => ', $auth.getPayload());
+            return $auth.getPayload();
         }
         
     }
