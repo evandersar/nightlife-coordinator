@@ -49,3 +49,36 @@ body {
 	width:100%;
 	margin-top: 10px;
 }
+
+.login-btn{
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: #3B5998;
+    color: white !important;
+}
+
+.login-btn:hover, .login-btn:focus{
+    background-color: #3B5998 !important;
+    color: white !important;
+}
+
+.login-btn:active {	/* Scale the button down by 10% when clicking on button */
+	transform: scale(0.9, 0.9);
+	-webkit-transform: scale(0.9, 0.9);
+	-moz-transform: scale(0.9, 0.9);
+}
+
+.dropdown-toggle{
+	cursor: pointer;
+}
+
+.signout-btn {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.navbar-nav {
+	margin-top: 0;
+	margin-bottom: 0;
+}
