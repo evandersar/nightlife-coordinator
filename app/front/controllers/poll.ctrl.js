@@ -115,7 +115,7 @@
                     pollId,
                     function(resp) {
                         console.log(`Poll with id: ${resp._id} successfully deleted`);
-                        alert(`Poll with id: ${resp._id} successfully deleted`);
+                        //alert(`Poll with id: ${resp._id} successfully deleted`);
                         $state.go('home');
                     },
                     function(err) {

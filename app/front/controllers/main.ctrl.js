@@ -14,9 +14,8 @@
         vm.signout = signout;
         vm.getName = getName;
         
+        //console.log('vm.authenticated => ', vm.authenticated);
         if (vm.authenticated) vm.getName();
-
-        console.log('vm.authenticated => ', vm.authenticated);
 
         function authenticate(provider) {
             authService.authenticate(provider)

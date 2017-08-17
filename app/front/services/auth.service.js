@@ -29,7 +29,7 @@
         }
         
         function getPayload() {
-            console.log('$auth.getPayload() => ', $auth.getPayload());
+            //console.log('$auth.getPayload() => ', $auth.getPayload());
             return $auth.getPayload();
         }
         
