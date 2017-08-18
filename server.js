@@ -9,7 +9,7 @@ var routes = require('./app/routes/index.js');
 var app = express();
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 mongo.connect(process.env.MONGO_URI, function(err, db) {

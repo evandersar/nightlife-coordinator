@@ -1,33 +1,37 @@
 <div class="row" ng-controller="PollController as vm">
-    
-    <div class="col-md-5">
-        
-        <form>
-          
-          <h3>{{vm.poll.title}}</h3>
-          <div class="form-group">
-            <label for="pollOptions">Please select the answer :</label>
-            <select class="form-control" id="pollOptions" ng-model="vm.answer">
+
+  <div class="col-md-5">
+
+    <form name="vm.votingForm">
+
+      <h3>{{vm.poll.title}}</h3>
+      <div class="form-group">
+        <label for="pollOptions">Select the answer :</label>
+        <select class="form-control" id="pollOptions" ng-model="vm.answer" name="answer" ng-pattern="'^((?!--Select--).)*$'"
+                ng-class="{'input-validation-error' : (!vm.answer && vm.votingForm.answer.$touched) || 
+                                                      (!vm.answer && vm.votingForm.$submitted)}">
                 <option>--Select--</option>
                 <option ng-repeat="option in vm.poll.options" value="{{option.value}}">{{option.value}}</option>
                 <option ng-if="vm.authenticated">Custom answer</option>
             </select>
-          </div>
-          
-          <div class="form-group" ng-if="vm.answer === 'Custom answer'">
-            <label for="own">Add your own answer</label>
-            <input type="text" class="form-control" id="own" ng-model="vm.customAnswer">
-          </div>
-          
-          <button type="button" class="btn btn-success" ng-click="vm.updatePoll()">Submit</button>
-          <a ng-href="https://www.facebook.com/dialog/share?app_id=283756712103783&display=popup&href={{vm.pollURL}}&redirect_uri={{vm.redirectURL}}" ng-if="vm.isauthor" class="btn btn-primary">Share on Facebook</a>
-          <button ng-if="vm.isauthor" type="button" class="btn btn-danger" ng-click="vm.deletePoll()">Delete this Poll</button>
-        </form>
-    
-    </div>
-    
-    <div class="col-md-7">
-        <div google-chart chart="vm.myChartObject" class="mychart"></div>
-    </div>
-    
+      </div>
+
+      <div class="form-group" ng-if="vm.answer === 'Custom answer'">
+        <label for="own">Add your own answer</label>
+        <input type="text" class="form-control" id="own" ng-model="vm.customAnswer" name="custom" ng-required="true"
+            ng-class="{'input-validation-error' : (!vm.customAnswer && vm.votingForm.custom.$touched) || (!vm.customAnswer && vm.votingForm.$submitted)}">
+      </div>
+
+      <button type="submit" class="btn btn-success" ng-click="vm.updatePoll()">Submit</button>
+      <a ng-href="https://www.facebook.com/dialog/share?app_id=283756712103783&display=popup&href={{vm.pollURL}}&redirect_uri={{vm.redirectURL}}" ng-if="vm.isauthor" class="btn btn-primary">Share on Facebook</a>
+      <button ng-if="vm.isauthor" type="button" class="btn btn-danger" ng-click="vm.deletePoll()">Delete this Poll</button>
+      
+    </form>
+
+  </div>
+
+  <div class="col-md-7">
+    <div google-chart chart="vm.myChartObject" class="mychart"></div>
+  </div>
+
 </div>

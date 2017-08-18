@@ -1,12 +1,12 @@
 (function() {
     'use strict';
-    
+
     angular
         .module('app')
         .factory("restService", restService);
-        
+
     restService.$inject = ["$resource"];
-    
+
     function restService($resource) {
 
         var Poll = $resource(
@@ -19,12 +19,20 @@
             }
         );
 
+        var Mypoll = $resource(
+            '/api/mypolls', {}, 
+            {
+                getpolls: { method: 'POST', isArray: true }
+            }
+        );
+
         return {
             addPoll: addPoll,
             getPolls: getPolls,
             getPollById: getPollById,
             updatePoll: updatePoll,
-            deletePollById: deletePollById
+            deletePollById: deletePollById,
+            getMyPolls: getMyPolls
         };
 
         function addPoll(pollObj, callback, errorCallback) {
@@ -90,6 +98,19 @@
             );
         }
 
+        function getMyPolls(userId, callback, errorCallback) {
+            return Mypoll.getpolls({}, {
+                    userId: userId
+                },
+                function(resp) {
+                    callback(resp);
+                },
+                function(err) {
+                    errorCallback(err);
+                }
+            );
+        }
+
     }
-    
+
 })();

@@ -111,6 +111,22 @@ function PollsHandler (db) {
 			}
 		);
 	};
+	
+	this.getMyPolls = function (req, res) {
+		var facebookId = req.body.userId;
+		console.log("facebookId => ", facebookId);
+		
+	    polls.find(
+	    	{ author: facebookId},
+	    	{ title: 1 }
+	    ).toArray(function(err, data) {
+		      if (err) throw err;
+		      console.log("getMyPolls => ", data);
+		      
+		      res.writeHead(200, { 'Content-Type': 'text/json' });
+		      res.end(JSON.stringify( data ));
+		});
+	};
 
 }
 

@@ -5,9 +5,9 @@
         .module('app')
         .controller('PollController', PollController);
 
-    PollController.$inject = ["authService", "restService", "$state"];
+    PollController.$inject = ["authService", "restService", "$state", "$scope"];
 
-    function PollController(authService, restService, $state) {
+    function PollController(authService, restService, $state, $scope) {
         var vm = this;
         vm.getPoll = getPoll;
         vm.updatePoll = updatePoll;
@@ -31,7 +31,7 @@
                 pollId,
                 function(resp) {
                     vm.poll = resp;
-                    console.log("vm.poll => ", vm.poll);
+                    //console.log("vm.poll => ", vm.poll);
                     vm.renderChart(vm.poll.title, vm.poll.options);
                     vm.isauthor = vm.authenticated ? authService.getPayload()['sub'] === vm.poll.author : false;
                 },
@@ -45,7 +45,34 @@
         vm.getPoll();
 
         function updatePoll() {
-            if (vm.answer === "--Select--") {
+            vm.votingForm.$setSubmitted();
+            //console.log("vm.votingForm.$submitted => ", vm.votingForm.$submitted);
+            //console.log("vm.votingForm.$valid => ", vm.votingForm.$valid);
+            if (vm.votingForm.$valid) {
+                //console.log("vm.answer => ", vm.answer);
+                //console.log("vm.customAnswer => ", vm.customAnswer);
+                var option = (vm.customAnswer && vm.answer === "Custom answer") ? vm.customAnswer : vm.answer;
+                //console.log("option => ", option);
+
+                restService.updatePoll(
+                    pollId, { option: option },
+                    function(resp) {
+                        console.log(`Poll with id: ${resp._id} successfully updated`);
+                        //console.log("resp => ", resp);
+                        vm.poll = resp;
+                        vm.renderChart(vm.poll.title, vm.poll.options);
+                    },
+                    function(err) {
+                        console.log(err);
+                        alert(`${err.statusText} ${err.status}`);
+                    }
+                );
+            }
+            else if (!vm.answer) {
+                alert("Please select the answer");
+            }
+
+            /*if (vm.answer === "--Select--") {
                 console.log("Please select the answer");
                 alert("Please select the answer");
             }
@@ -73,7 +100,8 @@
                     }
                 );
 
-            }
+            }*/
+
         }
 
         function renderChart(title, options) {
@@ -124,6 +152,16 @@
                     }
                 );
             }
+        }
+
+        $scope.$on('logining', function(event, data) {
+            console.log(data);
+            reInit();
+        });
+        
+        function reInit(){
+            vm.authenticated = authService.isAuthenticated();
+            vm.isauthor = vm.authenticated ? authService.getPayload()['sub'] === vm.poll.author : false;
         }
 
         //console.log("End of PollController");

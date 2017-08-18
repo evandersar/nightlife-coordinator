@@ -18,6 +18,9 @@ module.exports = function(app, db) {
 		.put(pollsHandler.updatePollById)
 		.delete(pollsHandler.deletePollById);
 
+	app.route('/api/mypolls')
+		.post(pollsHandler.getMyPolls);
+
 	app.route('/auth/facebook')
 		.post(userHandler.login);
 
