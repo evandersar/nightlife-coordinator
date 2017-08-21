@@ -160,6 +160,7 @@
         });
         
         function reInit(){
+            vm.answer = "--Select--";
             vm.authenticated = authService.isAuthenticated();
             vm.isauthor = vm.authenticated ? authService.getPayload()['sub'] === vm.poll.author : false;
         }
