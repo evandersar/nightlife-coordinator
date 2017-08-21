@@ -72,36 +72,6 @@
                 alert("Please select the answer");
             }
 
-            /*if (vm.answer === "--Select--") {
-                console.log("Please select the answer");
-                alert("Please select the answer");
-            }
-            else if (vm.answer === "Custom answer" && !vm.customAnswer) {
-                console.log("Please type your answer");
-                alert("Please type your answer");
-            }
-            else {
-                //console.log("vm.answer => ", vm.answer);
-                //console.log("vm.customAnswer => ", vm.customAnswer);
-                var option = (vm.customAnswer && vm.answer === "Custom answer") ? vm.customAnswer : vm.answer;
-                //console.log("option => ", option);
-
-                restService.updatePoll(
-                    pollId, { option: option },
-                    function(resp) {
-                        console.log(`Poll with id: ${resp._id} successfully updated`);
-                        //console.log("resp => ", resp);
-                        vm.poll = resp;
-                        vm.renderChart(vm.poll.title, vm.poll.options);
-                    },
-                    function(err) {
-                        console.log(err);
-                        alert(`${err.statusText} ${err.status}`);
-                    }
-                );
-
-            }*/
-
         }
 
         function renderChart(title, options) {
