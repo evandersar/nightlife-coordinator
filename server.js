@@ -8,7 +8,7 @@ var routes = require('./app/back/routes/index.js');
 var app = express();
 require('dotenv').config();
 
-mongo.connect(process.env.MONGO_URI || 'mongodb://evan:evan@ds153853.mlab.com:53853/clementinejs', function(err, db) {
+mongo.connect(process.env.MONGO_URI, function(err, db) {
 
 	if (err) {
 		throw new Error('Database failed to connect!');
