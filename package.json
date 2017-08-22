@@ -29,7 +29,6 @@
     "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
     "mongodb": "^2.0.33",
-    "mongoose": "^4.11.5",
     "request": "^2.81.0",
     "satellizer": "^0.15.5"
   }

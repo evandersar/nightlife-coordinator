@@ -4,10 +4,8 @@ var request = require('request');
 var jwt = require('jwt-simple');
 var moment = require('moment');
 
-var User = require('./models/user.js');
-
-function UserHandler() {
-
+function UserHandler(db) {
+	var users = db.collection('users');
 	/*
 	 |--------------------------------------------------------------------------
 	 | Generate JSON Web Token
@@ -53,45 +51,63 @@ function UserHandler() {
 					return res.status(500).send({ message: profile.error.message });
 				}
 				if (req.header('Authorization')) {
-					User.findOne({ facebook: profile.id }, function(err, existingUser) {
+
+					users.findOne({ facebook: profile.id }, function(err, existingUser) {
 						if (err) throw err;
 						if (existingUser) {
 							return res.status(409).send({ message: 'There is already a Facebook account that belongs to you' });
 						}
 						var token = req.header('Authorization').split(' ')[1];
 						var payload = jwt.decode(token, process.env.TOKEN_SECRET);
-						User.findById(payload.sub, function(err, user) {
+
+
+						users.findOne({ _id: require('mongodb').ObjectID(payload.sub) }, function(err, user) {
 							if (err) throw err;
 							if (!user) {
 								return res.status(400).send({ message: 'User not found' });
 							}
+
 							user.facebook = profile.id;
 							user.picture = user.picture || 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large';
 							user.displayName = user.displayName || profile.name;
-							user.save(function() {
+							user.createdAt = Date.now();
+
+							users.insert(user, function(err, data) {
+								if (err) throw err;
 								var token = createJWT(user);
 								res.send({ token: token });
 							});
+
 						});
+
 					});
+
+
 				}
 				else {
 					// Step 3. Create a new user account or return an existing one.
-					User.findOne({ facebook: profile.id }, function(err, existingUser) {
+
+					users.findOne({ facebook: profile.id }, function(err, existingUser) {
 						if (err) throw err;
 						if (existingUser) {
 							var token = createJWT(existingUser);
 							return res.send({ token: token });
 						}
-						var user = new User();
-						user.facebook = profile.id;
-						user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
-						user.displayName = profile.name;
-						user.save(function() {
+
+						var user = {
+							facebook: profile.id,
+							picture: 'https://graph.facebook.com/' + profile.id + '/picture?type=large',
+							displayName: profile.name,
+							createdAt: Date.now()
+						};
+
+						users.insert(user, function(err, data) {
+							if (err) throw err;
 							var token = createJWT(user);
 							res.send({ token: token });
 						});
 					});
+					
 				}
 			});
 		});

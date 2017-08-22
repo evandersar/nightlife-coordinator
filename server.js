@@ -2,15 +2,11 @@
 
 var express = require('express');
 var mongo = require('mongodb').MongoClient;
-var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var routes = require('./app/routes/index.js');
+var routes = require('./app/back/routes/index.js');
 
 var app = express();
 require('dotenv').config();
-
-mongoose.connect(process.env.MONGO_URI || 'mongodb://evan:evan@ds153853.mlab.com:53853/clementinejs', {useMongoClient: true});
-mongoose.Promise = global.Promise;
 
 mongo.connect(process.env.MONGO_URI || 'mongodb://evan:evan@ds153853.mlab.com:53853/clementinejs', function(err, db) {
 

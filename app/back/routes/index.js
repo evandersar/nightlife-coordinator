@@ -7,7 +7,7 @@ var UserHandler = require(path + '/app/back/userHandler.js');
 module.exports = function(app, db) {
 
 	var pollsHandler = new PollsHandler(db);
-	var userHandler = new UserHandler();
+	var userHandler = new UserHandler(db);
 
 	app.route('/api/polls')
 		.post(pollsHandler.addPoll)
