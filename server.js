@@ -32,7 +32,7 @@ mongo.connect(process.env.MONGO_URI, function(err, db) {
 
 	routes(app, db);
 
-	var port = process.env.PORT || 7038;
+	var port = process.env.PORT || 8080;
 	app.listen(port, function() {
 		console.log('Node.js listening on port ' + port + '...');
 		//console.log("process.env.APP_URL => ", process.env.APP_URL);
