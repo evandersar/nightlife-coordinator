@@ -9,10 +9,10 @@ var routes = require('./app/routes/index.js');
 var app = express();
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGO_URI, {useMongoClient: true});
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/clementinejs', {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
-mongo.connect(process.env.MONGO_URI, function(err, db) {
+mongo.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/clementinejs', function(err, db) {
 
 	if (err) {
 		throw new Error('Database failed to connect!');
