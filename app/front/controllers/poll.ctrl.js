@@ -45,9 +45,10 @@
         vm.getPoll();
 
         function updatePoll() {
+            //console.log("vm.answer => ", vm.answer);
             vm.votingForm.$setSubmitted();
             //console.log("vm.votingForm.$submitted => ", vm.votingForm.$submitted);
-            //console.log("vm.votingForm.$valid => ", vm.votingForm.$valid);
+            console.log("vm.votingForm.$valid => ", vm.votingForm.$valid);
             if (vm.votingForm.$valid) {
                 //console.log("vm.answer => ", vm.answer);
                 //console.log("vm.customAnswer => ", vm.customAnswer);
@@ -55,12 +56,21 @@
                 //console.log("option => ", option);
 
                 restService.updatePoll(
-                    pollId, { option: option },
+                    pollId, {
+                        option: option,
+                        voter: (vm.authenticated ? authService.getPayload()['sub'] : undefined)
+                    },
                     function(resp) {
-                        console.log(`Poll with id: ${resp._id} successfully updated`);
-                        //console.log("resp => ", resp);
-                        vm.poll = resp;
-                        vm.renderChart(vm.poll.title, vm.poll.options);
+                        if (resp.errMsg) {
+                            console.log(resp.errMsg);
+                            alert(resp.errMsg);
+                        }
+                        else {
+                            console.log(`Poll with id: ${resp._id} successfully updated`);
+                            //console.log("resp => ", resp);
+                            vm.poll = resp;
+                            vm.renderChart(vm.poll.title, vm.poll.options);
+                        }
                     },
                     function(err) {
                         console.log(err);
@@ -68,7 +78,7 @@
                     }
                 );
             }
-            else if (!vm.answer) {
+            else if (!vm.answer || vm.answer === "--Select--") {
                 alert("Please select the answer");
             }
 
@@ -128,8 +138,8 @@
             console.log(data);
             reInit();
         });
-        
-        function reInit(){
+
+        function reInit() {
             vm.answer = "--Select--";
             vm.authenticated = authService.isAuthenticated();
             vm.isauthor = vm.authenticated ? authService.getPayload()['sub'] === vm.poll.author : false;

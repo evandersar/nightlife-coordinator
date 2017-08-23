@@ -20,7 +20,8 @@
             options: [
                 { value: "", votes: 0 },
                 { value: "", votes: 0 }
-            ]
+            ],
+            voters : []
         };
 
 
