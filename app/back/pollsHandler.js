@@ -49,12 +49,12 @@ function PollsHandler(db) {
 
 		var voterID = req.body.voter;
 		var voterIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-		console.log("voterID => ", voterID);
-		console.log("voterIP => ", voterIP);
+		//console.log("voterID => ", voterID);
+		//console.log("voterIP => ", voterIP);
 
 		polls.find({ _id: require('mongodb').ObjectID(pollId), "options.value": optionValue }).toArray(function(err, data) {
 			if (err) throw err;
-			console.log("updatePollById => ", data[0]);
+			//console.log("updatePollById => ", data[0]);
 
 			//if option exist in poll.options
 			if (data[0]) {
