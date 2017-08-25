@@ -88,8 +88,7 @@ function PollsHandler(db) {
 			else {
 				var option = { value: optionValue, votes: 1 };
 				polls.findAndModify({ _id: require('mongodb').ObjectID(pollId) }, [], {
-						$push: { options: option },
-						$push: { voters: { id: voterID, ip: voterIP } }
+						$push: { options: option, voters: { id: voterID, ip: voterIP } }
 					}, { new: true },
 					function(err, doc) {
 						if (err) throw err;
