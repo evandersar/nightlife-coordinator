@@ -48,7 +48,7 @@
             //console.log("vm.answer => ", vm.answer);
             vm.votingForm.$setSubmitted();
             //console.log("vm.votingForm.$submitted => ", vm.votingForm.$submitted);
-            console.log("vm.votingForm.$valid => ", vm.votingForm.$valid);
+            //console.log("vm.votingForm.$valid => ", vm.votingForm.$valid);
             if (vm.votingForm.$valid) {
                 //console.log("vm.answer => ", vm.answer);
                 //console.log("vm.customAnswer => ", vm.customAnswer);

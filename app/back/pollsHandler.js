@@ -52,54 +52,178 @@ function PollsHandler(db) {
 		//console.log("voterID => ", voterID);
 		//console.log("voterIP => ", voterIP);
 
-		polls.find({ _id: require('mongodb').ObjectID(pollId), "options.value": optionValue }).toArray(function(err, data) {
+		//return poll, but if it only have optionValue in its options
+		polls.find({ _id: require('mongodb').ObjectID(pollId), "options.value": optionValue }).toArray(function(err, poll) {
 			if (err) throw err;
-			//console.log("updatePollById => ", data[0]);
+			//console.log("poll => ", poll);
 
-			//if option exist in poll.options
-			if (data[0]) {
-				//check to determine that user voted for current poll or not
-				if ((voterID || voterIP) && data[0].voters[0]) {
-					for (let item of data[0].voters) {
-						if (item.id == voterID || item.ip == voterIP) {
-							res.json({ errMsg: 'You can only vote once a poll (user account or IP)' });
-						}
-					}
-				}
-				else {
-					polls.findAndModify({
-							_id: require('mongodb').ObjectID(pollId),
-							"options.value": optionValue
-						}, [], {
-							$inc: { 'options.$.votes': 1 },
-							$push: { voters: { id: voterID, ip: voterIP } }
-						}, { new: true },
-						function(err, doc) {
-							if (err) throw err;
-							//console.log("updated Poll => ", doc);
-
-							res.writeHead(200, { 'Content-Type': 'text/json' });
-							res.end(JSON.stringify(doc.value));
-						}
-					);
-				}
-			}
-			//if dont exist create new option
-			else {
-				var option = { value: optionValue, votes: 1 };
-				polls.findAndModify({ _id: require('mongodb').ObjectID(pollId) }, [], {
-						$push: { options: option, voters: { id: voterID, ip: voterIP } }
+			//if option exist in poll.options and dont have any voters, vote
+			if (poll[0] && !poll[0].voters[0]) {
+				polls.findAndModify({
+						_id: require('mongodb').ObjectID(pollId),
+						"options.value": optionValue
+					}, [], {
+						$inc: { 'options.$.votes': 1 },
+						$push: { voters: { id: voterID, ip: voterIP } }
 					}, { new: true },
 					function(err, doc) {
 						if (err) throw err;
-						//console.log("Poll with new option => ", doc.value);
+						//console.log("updated Poll any => ", doc);
 
 						res.writeHead(200, { 'Content-Type': 'text/json' });
 						res.end(JSON.stringify(doc.value));
 					}
 				);
 			}
+			//if option exist in poll.options and have at least one voter
+			else if (poll[0] && poll[0].voters[0]) {
+				//check to determine that user voted for current poll or not
+				for (let item of poll[0].voters) {
+					//if voted send message
+					if (item.id == voterID || item.ip == voterIP) {
+						return res.json({ errMsg: 'You can only vote once a poll (user account or IP)' });
+					}
+				}
+				//if dont voted, vote
+				polls.findAndModify({
+						_id: require('mongodb').ObjectID(pollId),
+						"options.value": optionValue
+					}, [], {
+						$inc: { 'options.$.votes': 1 },
+						$push: { voters: { id: voterID, ip: voterIP } }
+					}, { new: true },
+					function(err, doc) {
+						if (err) throw err;
+						//console.log("updated Poll one => ", doc);
+
+						res.writeHead(200, { 'Content-Type': 'text/json' });
+						res.end(JSON.stringify(doc.value));
+					}
+				);
+			}
+			//if option dont exist, create new option
+			else {
+				//but only if user dont have voted for this poll
+				polls.find({ _id: require('mongodb').ObjectID(pollId) }).toArray(function(err, poll) {
+					if (err) throw err;
+					//console.log("poll option dont exist => ", poll);
+
+					//check to determine that user voted for current poll or not
+					for (let item of poll[0].voters) {
+						//if voted send message
+						if (item.id == voterID || item.ip == voterIP) {
+							return res.json({ errMsg: 'You can only vote once a poll (user account or IP)' });
+						}
+					}
+					//if dont voted, create new option and vote
+					var option = { value: optionValue, votes: 1 };
+					polls.findAndModify({ _id: require('mongodb').ObjectID(pollId) }, [], {
+							$push: { options: option, voters: { id: voterID, ip: voterIP } }
+						}, { new: true },
+						function(err, doc) {
+							if (err) throw err;
+							//console.log("Poll with new option => ", doc.value);
+
+							res.writeHead(200, { 'Content-Type': 'text/json' });
+							res.end(JSON.stringify(doc.value));
+						}
+					);
+				});
+			}
 		});
+
+
+		//return poll by id (second variant of realization)
+		/*polls.find({ _id: require('mongodb').ObjectID(pollId) }).toArray(function(err, poll) {
+			if (err) throw err;
+			console.log("poll => ", poll);
+			//check if poll have voters
+			if (poll[0].voters[0]) {
+				for (let item of poll[0].voters) {
+					//user voted for this poll, dont update poll
+					if (item.id == voterID || item.ip == voterIP) {
+						return res.json({ errMsg: 'You can only vote once a poll (user account or IP)' });
+					}
+				}
+				polls.find({ _id: require('mongodb').ObjectID(pollId), "options.value": optionValue }).toArray(function(err, poll) {
+					if (err) throw err;
+					console.log("poll => ", poll);
+					//if poll option exist in poll.options
+					if (poll[0]) {
+						polls.findAndModify({
+								_id: require('mongodb').ObjectID(pollId),
+								"options.value": optionValue
+							}, [], {
+								$inc: { 'options.$.votes': 1 },
+								$push: { voters: { id: voterID, ip: voterIP } }
+							}, { new: true },
+							function(err, doc) {
+								if (err) throw err;
+								console.log("updated Poll => ", doc);
+
+								res.writeHead(200, { 'Content-Type': 'text/json' });
+								res.end(JSON.stringify(doc.value));
+							}
+						);
+					}
+					//poll option dont exist in poll.options
+					else {
+						var option = { value: optionValue, votes: 1 };
+						polls.findAndModify({ _id: require('mongodb').ObjectID(pollId) }, [], {
+								$push: { options: option, voters: { id: voterID, ip: voterIP } }
+							}, { new: true },
+							function(err, doc) {
+								if (err) throw err;
+								console.log("Poll with new option => ", doc.value);
+
+								res.writeHead(200, { 'Content-Type': 'text/json' });
+								res.end(JSON.stringify(doc.value));
+							}
+						);
+					}
+				});
+			}
+			//if poll dont have any voters
+			else {
+				polls.find({ _id: require('mongodb').ObjectID(pollId), "options.value": optionValue }).toArray(function(err, poll) {
+					if (err) throw err;
+					console.log("poll => ", poll);
+					//if poll option exist in poll.options
+					if (poll[0]) {
+						polls.findAndModify({
+								_id: require('mongodb').ObjectID(pollId),
+								"options.value": optionValue
+							}, [], {
+								$inc: { 'options.$.votes': 1 },
+								$push: { voters: { id: voterID, ip: voterIP } }
+							}, { new: true },
+							function(err, doc) {
+								if (err) throw err;
+								console.log("updated Poll => ", doc);
+
+								res.writeHead(200, { 'Content-Type': 'text/json' });
+								res.end(JSON.stringify(doc.value));
+							}
+						);
+					}
+					//poll option dont exist in poll.options
+					else {
+						var option = { value: optionValue, votes: 1 };
+						polls.findAndModify({ _id: require('mongodb').ObjectID(pollId) }, [], {
+								$push: { options: option, voters: { id: voterID, ip: voterIP } }
+							}, { new: true },
+							function(err, doc) {
+								if (err) throw err;
+								console.log("Poll with new option => ", doc.value);
+
+								res.writeHead(200, { 'Content-Type': 'text/json' });
+								res.end(JSON.stringify(doc.value));
+							}
+						);
+					}
+				});
+			}
+		});*/
 
 	};
 
