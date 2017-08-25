@@ -21,7 +21,7 @@
                 { value: "", votes: 0 },
                 { value: "", votes: 0 }
             ],
-            voters : []
+            voters: []
         };
 
 
@@ -38,12 +38,23 @@
             }
         }
 
+        function leftUniqueOptions() {
+            var uniqueOptions = [vm.poll.options[0]];
+            for (let option of vm.poll.options) {
+                if (uniqueOptions[uniqueOptions.length-1].value !== option.value) {
+                    uniqueOptions.push(option);
+                }
+            }
+            return uniqueOptions;
+        }
+
         function savePoll() {
             vm.pollForm.$setSubmitted();
             //console.log("vm.pollForm.$submitted => ", vm.pollForm.$submitted);
             //console.log("vm.pollForm.$valid => ", vm.pollForm.$valid);
             if (vm.pollForm.$valid) {
                 vm.poll.author = authService.getPayload()['sub'];
+                vm.poll.options = leftUniqueOptions();
 
                 restService.addPoll(
                     vm.poll,
