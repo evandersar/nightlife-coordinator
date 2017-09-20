@@ -21,15 +21,18 @@
   "author": "Blake Johnston",
   "license": "MIT",
   "dependencies": {
-    "@uirouter/angularjs": "latest",
-    "angular-google-chart": "^1.0.0-beta.1",
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "express": "^4.12.4",
+    "foursquarevenues": "^3.0.1",
     "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
-    "mongodb": "^2.0.33",
+    "mongoose": "^4.11.12",
+    "morgan": "^1.8.2",
     "request": "^2.81.0",
     "satellizer": "^0.15.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
   }
 }

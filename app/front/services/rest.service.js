@@ -19,49 +19,14 @@
             }
         );
 
-        var Mypoll = $resource(
-            '/api/mypolls', {}, 
-            {
-                getpolls: { method: 'POST', isArray: true }
-            }
-        );
-
         return {
-            addPoll: addPoll,
             getPolls: getPolls,
-            getPollById: getPollById,
-            updatePoll: updatePoll,
-            deletePollById: deletePollById,
-            getMyPolls: getMyPolls
+            updatePoll: updatePoll
         };
 
-        function addPoll(pollObj, callback, errorCallback) {
-            return Poll.save(
-                pollObj,
-                function(resp) {
-                    callback(resp);
-                },
-                function(err) {
-                    errorCallback(err);
-                }
-            );
-        }
 
         function getPolls(callback, errorCallback) {
             return Poll.query(
-                function(resp) {
-                    callback(resp);
-                },
-                function(err) {
-                    errorCallback(err);
-                }
-            );
-        }
-
-        function getPollById(id, callback, errorCallback) {
-            return Poll.get({}, {
-                    id: id
-                },
                 function(resp) {
                     callback(resp);
                 },
@@ -76,32 +41,6 @@
                     id: id
                 },
                 option,
-                function(resp) {
-                    callback(resp);
-                },
-                function(err) {
-                    errorCallback(err);
-                }
-            );
-        }
-
-        function deletePollById(id, callback, errorCallback) {
-            return Poll.delete({}, {
-                    id: id
-                },
-                function(resp) {
-                    callback(resp);
-                },
-                function(err) {
-                    errorCallback(err);
-                }
-            );
-        }
-
-        function getMyPolls(userId, callback, errorCallback) {
-            return Mypoll.getpolls({}, {
-                    userId: userId
-                },
                 function(resp) {
                     callback(resp);
                 },

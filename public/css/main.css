@@ -1,89 +1,21 @@
-/****** Main Styling ******/
-
 body {
-	font-family: 'Roboto', sans-serif;
-	font-size: 16px;
-	background-color: #96D8D2;
+	padding-top: 40px;
+	background-color: skyblue;
 }
 
-.active-route {
-	font-weight: bold; 
+.row {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: 1px solid #eee;
+	border-radius: 5px;
+	padding: 10px;
+	background-color: #eee;
 }
 
-/****** Click Styling ******/
-
-.btn {	/* Styling for buttons */
-	margin: 0 8px;
-	display: inline-block;
-	border: 0;
-	font-size: 14px;
-	border-radius: 3px;
-	padding: 10px 5px;
-	min-width: 100px;
-	font-weight: 500;
+.butt {
+	margin-top: 5px;
 }
 
-.btn:focus {	/* Remove outline when hovering over button */
-	outline: none;
-}
-
-.btn:active {	/* Scale the button down by 10% when clicking on button */
-	transform: scale(0.9, 0.9);
-	-webkit-transform: scale(0.9, 0.9);
-	-moz-transform: scale(0.9, 0.9);
-}
-
-.btn-delete {	/* Styling for delete button */
-	background-color: #ECEFF1;
-	color: #212121;
-}
-
-/****** Other Styling ******/
-
-.option{
-	margin: 5px 0;
-}
-
-.mychart{
-	height:400px; 
-	width:100%;
-	margin-top: 10px;
-}
-
-.login-btn{
-    border: 1px solid;
-    border-radius: 5px;
-    background-color: #3B5998;
-    color: white !important;
-}
-
-.login-btn:hover, .login-btn:focus{
-    background-color: #3B5998 !important;
-    color: white !important;
-}
-
-.login-btn:active {	/* Scale the button down by 10% when clicking on button */
-	transform: scale(0.9, 0.9);
-	-webkit-transform: scale(0.9, 0.9);
-	-moz-transform: scale(0.9, 0.9);
-}
-
-.dropdown-toggle{
-	cursor: pointer;
-}
-
-.signout-btn {
-    display: block;
-    width: 90%;
-    margin: 0 auto;
-}
-
-.navbar-nav {
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-.input-validation-error {
-    border: 1px solid #a94442;
-    background-color: #f2dede;
+.jumbotron {
+	padding: 10px 40px;
 }

@@ -1,37 +1,29 @@
 'use strict';
 
 var express = require('express');
-var mongo = require('mongodb').MongoClient;
+var mongoose = require('mongoose');
+var morgan       = require('morgan');
 var bodyParser = require('body-parser');
 var routes = require('./app/back/routes/index.js');
 
 var app = express();
 require('dotenv').config();
 
-mongo.connect(process.env.MONGO_URI, function(err, db) {
+mongoose.connect(process.env.MONGO_URI, { useMongoClient: true }); // connect to our database
+mongoose.Promise = global.Promise;
 
-	if (err) {
-		throw new Error('Database failed to connect!');
-	}
-	else {
-		console.log('MongoDB successfully connected on port 27017.');
-	}
+app.use(morgan('dev')); // log every request to the console
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 
-	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded({
-		extended: true
-	}));
+app.use('/public', express.static(process.cwd() + '/public'));
+app.use('/front', express.static(process.cwd() + '/app/front'));
 
-	app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
-	app.use('/public', express.static(process.cwd() + '/public'));
-	app.use('/front', express.static(process.cwd() + '/app/front'));
+routes(app);
 
-	routes(app, db);
-
-	var port = process.env.PORT || 8080;
-	app.listen(port, function() {
-		console.log('Node.js listening on port ' + port + '...');
-		//console.log("process.env.APP_URL => ", process.env.APP_URL);
-	});
-
+var port = process.env.PORT || 8080;
+app.listen(port, function() {
+	console.log('Node.js listening on port ' + port + '...');
 });

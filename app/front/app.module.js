@@ -2,73 +2,51 @@
     'use strict';
 
     angular
-        .module('app', ['ui.router', 'ngResource', 'googlechart', 'satellizer'])
-        .config(routerConfig);
+        .module('app', ['ngResource', 'satellizer'])
+        .config(appConfig)
+        .controller('MainController', MainController);
 
-    function routerConfig($stateProvider, $urlRouterProvider, $locationProvider, $authProvider) {
-
+    function appConfig($authProvider) {
         $authProvider.facebook({
-            clientId: '283756712103783'
+            clientId: '490257804656898'
         });
+    }
+    
+    MainController.$inject = ["authService"];
 
-        // Optional: For client-side use (Implicit Grant), set responseType to 'token' (default: 'code')
-        /*$authProvider.facebook({
-            clientId: '283756712103783',
-            responseType: 'token'
-        });*/
+    function MainController(authService) {
+        var vm = this;
+        vm.authenticated = authService.isAuthenticated();
+        vm.authenticate = authenticate;
+        vm.signout = signout;
+        vm.getName = getName;
+        
+        //console.log('vm.authenticated => ', vm.authenticated);
+        if (vm.authenticated) vm.getName();
 
-        $locationProvider.html5Mode(true);
-
-        var states = [{
-                name: 'home',
-                url: '/home',
-                templateUrl: 'front/views/home.html'
-            },
-
-            {
-                name: 'mypolls',
-                url: '/mypolls',
-                templateUrl: 'front/views/mypolls.html',
-                resolve: {
-                    redirectIfNotAuthenticated: _redirectIfNotAuthenticated
-                }
-            },
-
-            {
-                name: 'newpoll',
-                url: '/newpoll',
-                templateUrl: 'front/views/newpoll.html',
-                resolve: {
-                    redirectIfNotAuthenticated: _redirectIfNotAuthenticated
-                }
-            },
-
-            {
-                name: 'poll',
-                url: '/poll/:id',
-                templateUrl: 'front/views/poll.html'
-            },
-        ];
-
-        function _redirectIfNotAuthenticated($q, $state, $auth, $timeout, authService) {
-            var defer = $q.defer();
-            if (authService.isAuthenticated()) {
-                defer.resolve(); /* (3) */
-            }
-            else {
-                $timeout(function() {
-                    $state.go('home'); /* (4) */
+        function authenticate(provider) {
+            authService.authenticate(provider)
+                .then(function(response) {
+                    // Signed in with provider.
+                    console.log('Signed in with provider');
+                    //console.log('response => ', response);
+                    vm.authenticated = authService.isAuthenticated();
+                    vm.getName();
+                })
+                .catch(function(response) {
+                    // Something went wrong.
+                    console.log('Something went wrong');
                 });
-                defer.reject();
-            }
-            return defer.promise;
         }
-
-        states.forEach(function(state) {
-            $stateProvider.state(state);
-        });
-
-        $urlRouterProvider.otherwise('/home');
+        
+        function signout(){
+             authService.logout();
+             vm.authenticated = authService.isAuthenticated();
+        }
+        
+        function getName(){
+             vm.username = authService.getPayload()['name'];
+        }
 
     }
 
