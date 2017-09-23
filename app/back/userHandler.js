@@ -4,9 +4,9 @@ var request = require('request');
 var jwt = require('jwt-simple');
 var moment = require('moment');
 
-function UserHandler() {
+var User = require('./models/user');
 
-	var User = require('./models/user');
+function UserHandler() {
 
 	/*
 	 |--------------------------------------------------------------------------
@@ -15,7 +15,7 @@ function UserHandler() {
 	 */
 	function createJWT(user) {
 		var payload = {
-			sub: user._id,
+			facebook: user.facebook,
 			name: user.displayName,
 			iat: moment().unix(),
 			exp: moment().add(14, 'days').unix()

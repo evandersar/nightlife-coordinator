@@ -9,24 +9,27 @@
 
     function restService($resource) {
 
-        var Poll = $resource(
-            '/api/polls/:id', {
+        var Venue = $resource(
+            '/api/venue/:id', {
                 id: '@id'
             }, {
                 "update": {
                     method: "PUT"
-                }
+                },
+                getvenues: { method: 'POST', isArray: true }
             }
         );
 
         return {
-            getPolls: getPolls,
-            updatePoll: updatePoll
+            getVenues: getVenues,
+            updateVenue: updateVenue
         };
 
 
-        function getPolls(callback, errorCallback) {
-            return Poll.query(
+        function getVenues(city, callback, errorCallback) {
+            return Venue.getvenues({}, {
+                    city: city
+                },
                 function(resp) {
                     callback(resp);
                 },
@@ -36,11 +39,11 @@
             );
         }
 
-        function updatePoll(id, option, callback, errorCallback) {
-            return Poll.update({
+        function updateVenue(id, body, callback, errorCallback) {
+            return Venue.update({
                     id: id
                 },
-                option,
+                body,
                 function(resp) {
                     callback(resp);
                 },

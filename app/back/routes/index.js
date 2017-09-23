@@ -1,19 +1,19 @@
 'use strict';
 
 var path = process.cwd();
-var PollsHandler = require(path + '/app/back/pollsHandler.js');
+var VenueHandler = require(path + '/app/back/venueHandler.js');
 var UserHandler = require(path + '/app/back/userHandler.js');
 
 module.exports = function(app) {
 
-	var pollsHandler = new PollsHandler();
+	var venueHandler = new VenueHandler();
 	var userHandler = new UserHandler();
 
-	app.route('/api/polls')
-		.get(pollsHandler.getPolls);
+	app.route('/api/venue')
+		.post(venueHandler.getVenues);
 
-	app.route('/api/polls/:id')
-		.put(pollsHandler.updatePollById);
+	app.route('/api/venue/:id')
+		.put(venueHandler.updateVenue);
 
 	app.route('/auth/facebook')
 		.post(userHandler.login);
