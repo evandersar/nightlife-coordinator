@@ -39,11 +39,24 @@
 			</div>
 		</form>
 
-		<div class="alert alert-warning alert-dismissible" role="alert" ng-if="vm.errMsg">
+		<div class="alert alert-warning city-err" role="alert" ng-if="vm.errMsg">
+			<a href="" class="close" onclick="$('.city-err').hide()" aria-label="close">&times;</a>
 			{{vm.errMsg}}
+		</div>
+		<div class="alert alert-success auth-succ" role="alert" ng-if="vm.authSuccMsg">
+			<a href="" class="close" onclick="$('.auth-succ').hide()" aria-label="close">&times;</a>
+			{{vm.authSuccMsg}}
+		</div>
+		<div class="alert alert-danger auth-err" role="alert" ng-if="vm.authErrMsg">
+			<a href="" class="close" onclick="$('.auth-err').hide()" aria-label="close">&times;</a>
+			{{vm.authErrMsg}}
 		</div>
 
 		<div id="venuesContainer" class="container-fluid">
+			
+            <h1 ng-show="vm.searching" class="text-center">
+            	<span><i class="glyphicon glyphicon-refresh spinning"></i></span>
+            </h1>
 
 			<div class="row" ng-repeat="venue in vm.venues track by $index">
 				<div class="col-sm-2">

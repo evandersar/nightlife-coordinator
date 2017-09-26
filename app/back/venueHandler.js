@@ -1,5 +1,4 @@
 var async = require('async');
-var request = require('request');
 
 var Venue = require('./models/venue');
 var foursquare = (require('foursquarevenues'))('PFRQ1PRIZW2CMBOMSCU03U4MLMVH2G2RXKTG5F5C33SKMT4I', 'EXDLNOPVKQUSE01HY3QQPR0AIAW5HDMEVBSJAC3RH1FKKXPY');

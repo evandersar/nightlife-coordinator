@@ -22,31 +22,41 @@
         vm.getVenues = getVenues;
         vm.updateVenue = updateVenue;
         vm.errMsg = '';
+        vm.authSuccMsg = '';
+        vm.authErrMsg = '';
         vm.venues = [];
         vm.city = '';
+        vm.searching = false;
 
         function getVenues() {
+            vm.venues = [];
             if (!vm.city) {
                 vm.errMsg = 'Please type your city';
-                vm.venues = [];
+                $(".city-err").show();
             }
             else {
                 vm.errMsg = '';
+                vm.searching = true;
                 restService.getVenues(
                     vm.city,
                     function(resp) {
+                        vm.searching = false;
                         //console.log("resp => ", resp);
                         if (resp[0].errMsg) {
                             console.log(resp[0].errMsg);
                             vm.errMsg = resp[0].errMsg;
+                            $(".city-err").show();
                         }
                         else {
                             vm.venues = resp;
                         }
                     },
                     function(err) {
+                        vm.searching = false;
                         console.log(err);
-                        alert(`${err.statusText} ${err.status}`);
+                        //alert(`${err.statusText} ${err.status}`);
+                        vm.errMsg = `${err.statusText} ${err.status}`;
+                        $(".city-err").show();
                     }
                 );
             }
@@ -62,6 +72,7 @@
                         if (resp.errMsg) {
                             console.log(resp.errMsg);
                             vm.errMsg = resp.errMsg;
+                            $(".city-err").show();
                         }
                         else {
                             //console.log("resp => ", resp);
@@ -71,7 +82,9 @@
                     },
                     function(err) {
                         console.log(err);
-                        alert(`${err.statusText} ${err.status}`);
+                        //alert(`${err.statusText} ${err.status}`);
+                        vm.errMsg = `${err.statusText} ${err.status}`;
+                        $(".city-err").show();
                     }
                 );
             }
@@ -85,19 +98,25 @@
             authService.authenticate(provider)
                 .then(function(response) {
                     // Signed in with provider.
+                    vm.authErrMsg = '';
                     console.log('Signed in with provider');
+                    vm.authSuccMsg = `You successfully authorized as ${authService.getPayload()['name']}, now You can add/remove yourself by Going button !`;
+                    $(".auth-succ").show();
                     //console.log('response => ', response);
-                    vm.authenticated = authService.isAuthenticated();
+                    //vm.authenticated = authService.isAuthenticated();
                 })
                 .catch(function(response) {
                     // Something went wrong.
-                    console.log('Something went wrong');
+                    vm.authSuccMsg = '';
+                    console.log('Something went wrong', response);
+                    vm.authErrMsg = response + ". Please try one more time";
+                    $(".auth-err").show();
                 });
         }
 
         function signout() {
             authService.logout();
-            vm.authenticated = authService.isAuthenticated();
+            //vm.authenticated = authService.isAuthenticated();
         }
 
     }
