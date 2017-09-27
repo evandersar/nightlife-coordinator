@@ -115,7 +115,7 @@
                         }
                         else {
                             //console.log("resp => ", resp);
-                            console.log(`Venue with id: ${resp._id} successfully updated`);
+                            //console.log(`Venue with id: ${resp._id} successfully updated`);
                             vm.venues[index].going = resp.going;
                         }
                     },
@@ -138,7 +138,7 @@
                 .then(function(response) {
                     // Signed in with provider.
                     vm.authErrMsg = '';
-                    console.log('Signed in with provider');
+                    //console.log('Signed in with provider');
                     vm.authSuccMsg = `You successfully authorized as ${authService.getPayload()['name']}, now You can add/remove yourself by Going button !`;
                     $(".auth-succ").show();
                     //console.log('response => ', response);
