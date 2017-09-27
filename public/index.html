@@ -16,7 +16,7 @@
 	<link href="/public/css/main.css" rel="stylesheet" type="text/css">
 </head>
 
-<body ng-controller="MainController as vm" ng-cloak>
+<body ng-controller="MainController as vm">
 
 	<div class="container">
 
@@ -39,13 +39,13 @@
 			</div>
 		</form>
 
-		<div class="alert alert-warning city-err" role="alert" ng-if="vm.errMsg">
+		<div class="alert alert-warning city-err" role="alert" ng-if="vm.errMsg" ng-cloak>
 			<a href="" class="close" onclick="$('.city-err').hide()" aria-label="close">&times;</a> {{vm.errMsg}}
 		</div>
-		<div class="alert alert-success auth-succ" role="alert" ng-if="vm.authSuccMsg">
+		<div class="alert alert-success auth-succ" role="alert" ng-if="vm.authSuccMsg" ng-cloak>
 			<a href="" class="close" onclick="$('.auth-succ').hide()" aria-label="close">&times;</a> {{vm.authSuccMsg}}
 		</div>
-		<div class="alert alert-danger auth-err" role="alert" ng-if="vm.authErrMsg">
+		<div class="alert alert-danger auth-err" role="alert" ng-if="vm.authErrMsg" ng-cloak>
 			<a href="" class="close" onclick="$('.auth-err').hide()" aria-label="close">&times;</a> {{vm.authErrMsg}}
 		</div>
 
@@ -55,7 +55,7 @@
 				<span><i class="glyphicon glyphicon-refresh spinning"></i></span>
 			</h1>
 
-			<div class="row" dir-paginate="venue in vm.venues | itemsPerPage: vm.limit track by $index" total-items="vm.totalVenues" current-page="vm.pagination.current">
+			<div class="row" dir-paginate="venue in vm.venues | itemsPerPage: vm.limit track by $index" total-items="vm.totalVenues" current-page="vm.pagination.current" ng-cloak>
 				<div class="col-sm-2">
 					<img class="img-responsive" ng-src="{{venue.img}}">
 				</div>
@@ -75,7 +75,7 @@
 
 		<div ng-show="vm.venues[0]" class="container-fluid text-center">
 			<span class="limits">
-				<ul class="pagination">
+				<ul class="pagination" ng-cloak>
 					<li ng-repeat="limit in vm.limits" ng-class="{active : vm.limit === limit}" ng-click="vm.setLimit(limit)"><a href="">{{limit}}</a></li>
 				</ul>
 			</span>
