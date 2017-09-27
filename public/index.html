@@ -40,25 +40,22 @@
 		</form>
 
 		<div class="alert alert-warning city-err" role="alert" ng-if="vm.errMsg">
-			<a href="" class="close" onclick="$('.city-err').hide()" aria-label="close">&times;</a>
-			{{vm.errMsg}}
+			<a href="" class="close" onclick="$('.city-err').hide()" aria-label="close">&times;</a> {{vm.errMsg}}
 		</div>
 		<div class="alert alert-success auth-succ" role="alert" ng-if="vm.authSuccMsg">
-			<a href="" class="close" onclick="$('.auth-succ').hide()" aria-label="close">&times;</a>
-			{{vm.authSuccMsg}}
+			<a href="" class="close" onclick="$('.auth-succ').hide()" aria-label="close">&times;</a> {{vm.authSuccMsg}}
 		</div>
 		<div class="alert alert-danger auth-err" role="alert" ng-if="vm.authErrMsg">
-			<a href="" class="close" onclick="$('.auth-err').hide()" aria-label="close">&times;</a>
-			{{vm.authErrMsg}}
+			<a href="" class="close" onclick="$('.auth-err').hide()" aria-label="close">&times;</a> {{vm.authErrMsg}}
 		</div>
 
 		<div id="venuesContainer" class="container-fluid">
-			
-            <h1 ng-show="vm.searching" class="text-center">
-            	<span><i class="glyphicon glyphicon-refresh spinning"></i></span>
-            </h1>
 
-			<div class="row" ng-repeat="venue in vm.venues track by $index">
+			<h1 ng-show="vm.searching" class="text-center">
+				<span><i class="glyphicon glyphicon-refresh spinning"></i></span>
+			</h1>
+
+			<div class="row" dir-paginate="venue in vm.venues | itemsPerPage: vm.limit track by $index" total-items="vm.totalVenues" current-page="vm.pagination.current">
 				<div class="col-sm-2">
 					<img class="img-responsive" ng-src="{{venue.img}}">
 				</div>
@@ -76,6 +73,10 @@
 
 		</div>
 
+		<div ng-show="vm.venues[0]" class="container-fluid text-center">
+			<dir-pagination-controls on-page-change="vm.pageChanged(newPageNumber)"></dir-pagination-controls>
+		</div>
+
 	</div>
 
 
@@ -85,7 +86,10 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.6.4/angular-resource.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/satellizer/0.15.5/satellizer.min.js"></script>
 
+	<script type="text/javascript" src="front/directives/dirPagination.js"></script>
+
 	<script type="text/javascript" src="front/app.module.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
 	<script type="text/javascript" src="front/services/rest.service.js"></script>
 	<script type="text/javascript" src="front/services/auth.service.js"></script>
 </body>

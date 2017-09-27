@@ -26,9 +26,11 @@
         };
 
 
-        function getVenues(city, callback, errorCallback) {
+        function getVenues(city, limit, offset, callback, errorCallback) {
             return Venue.getvenues({}, {
-                    city: city
+                    city: city,
+                    limit: limit,
+                    offset: offset
                 },
                 function(resp) {
                     callback(resp);

@@ -8,6 +8,8 @@ function VenueHandler() {
     this.getVenues = function(req, res) {
         //console.log("req.body => ", req.body);
         var city = req.body.city;
+        var limit = req.body.limit;
+        var offset = req.body.offset;
 
         console.log("CITY => ", city);
 
@@ -15,13 +17,14 @@ function VenueHandler() {
             "near": city,
             "query": "Nightlife",
             "venuePhotos": 1,
-            "limit": 50,
-            "offset": 0
+            "limit": limit || 10,
+            "offset": offset || 0
         };
 
         foursquare.exploreVenues(params, function(error, venues) {
             if (!error) {
                 console.log("foursquare.exploreVenues.totalResults => ", venues.response.totalResults);
+                var total = venues.response.totalResults;
 
                 var updatePromises = [];
 
@@ -79,6 +82,8 @@ function VenueHandler() {
                             function(err, venues) {
                                 if (err) throw err;
                                 //console.log("venues => ", venues);
+                                //add last object with total count of venues
+                                venues.push({total: total});
                                 res.writeHead(200, { 'Content-Type': 'text/json' });
                                 res.end(JSON.stringify(venues));
                             });

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngResource', 'satellizer'])
+        .module('app', ['ngResource', 'satellizer', 'angularUtils.directives.dirPagination'])
         .config(appConfig)
         .controller('MainController', MainController);
 
@@ -12,7 +12,7 @@
         });
     }
 
-    MainController.$inject = ["restService", "authService"];
+    MainController.$inject = ['restService', 'authService', ];
 
     function MainController(restService, authService) {
         var vm = this;
@@ -21,15 +21,42 @@
         vm.signout = signout;
         vm.getVenues = getVenues;
         vm.updateVenue = updateVenue;
+        vm.pageChanged = pageChanged;
+
         vm.errMsg = '';
         vm.authSuccMsg = '';
         vm.authErrMsg = '';
         vm.venues = [];
         vm.city = '';
         vm.searching = false;
+        vm.limit = 10;
+        vm.offset = 0;
+        vm.totalVenues = 0;
+        vm.pagination = {
+            current: 1
+        };
+        vm.previousCity = '';
+
+        function pageChanged(newPage) {
+            vm.offset = (newPage - 1) * vm.limit;
+            
+            if (vm.previousCity === vm.city) {
+                getVenues();
+            }
+            else{
+                vm.city = vm.previousCity;
+                getVenues();
+            }
+        }
 
         function getVenues() {
+            if (vm.previousCity !== vm.city) {
+                vm.offset = 0;
+                vm.pagination.current = 1;
+            }
+            vm.previousCity = vm.city;
             vm.venues = [];
+            
             if (!vm.city) {
                 vm.errMsg = 'Please type your city';
                 $(".city-err").show();
@@ -38,7 +65,7 @@
                 vm.errMsg = '';
                 vm.searching = true;
                 restService.getVenues(
-                    vm.city,
+                    vm.city, vm.limit, vm.offset,
                     function(resp) {
                         vm.searching = false;
                         //console.log("resp => ", resp);
@@ -48,6 +75,8 @@
                             $(".city-err").show();
                         }
                         else {
+                            vm.totalVenues = resp.pop()["total"];
+                            //console.log("vm.totalVenues => ", vm.totalVenues);
                             vm.venues = resp;
                         }
                     },
