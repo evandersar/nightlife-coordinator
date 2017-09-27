@@ -80,7 +80,7 @@
                         vm.searching = false;
                         //console.log("resp => ", resp);
                         if (resp[0].errMsg) {
-                            console.log(resp[0].errMsg);
+                            //console.log(resp[0].errMsg);
                             vm.errMsg = resp[0].errMsg;
                             $(".city-err").show();
                         }
@@ -92,7 +92,7 @@
                     },
                     function(err) {
                         vm.searching = false;
-                        console.log(err);
+                        //console.log(err);
                         //alert(`${err.statusText} ${err.status}`);
                         vm.errMsg = `${err.statusText} ${err.status}`;
                         $(".city-err").show();
@@ -109,7 +109,7 @@
                     },
                     function(resp) {
                         if (resp.errMsg) {
-                            console.log(resp.errMsg);
+                            //console.log(resp.errMsg);
                             vm.errMsg = resp.errMsg;
                             $(".city-err").show();
                         }
@@ -120,7 +120,7 @@
                         }
                     },
                     function(err) {
-                        console.log(err);
+                        //console.log(err);
                         //alert(`${err.statusText} ${err.status}`);
                         vm.errMsg = `${err.statusText} ${err.status}`;
                         $(".city-err").show();
@@ -147,7 +147,7 @@
                 .catch(function(response) {
                     // Something went wrong.
                     vm.authSuccMsg = '';
-                    console.log('Something went wrong', response);
+                    //console.log('Something went wrong', response);
                     vm.authErrMsg = response + ". Please try one more time";
                     $(".auth-err").show();
                 });

@@ -24,8 +24,6 @@
 			<h2><strong>Nightlife coordinator</strong></h2>
 			<h1><span class="fa fa-map-marker"></span> <span class="fa fa-glass"></span> <span class="fa fa-moon-o"></span></h1>
 			<h3>Drink to get drunk !!!</h3>
-			<!--<a href="" class="login-btn btn btn-primary" ng-click="vm.authenticate('facebook')" ng-if="!vm.authenticated">Sign in with Facebook</a>
-			<a href="" class="login-btn btn btn-primary" ng-click="vm.signout()" ng-if="vm.authenticated">Sign out</a>-->
 		</div>
 
 		<form id="searchform" class="form-horizontal">
@@ -51,7 +49,7 @@
 
 		<div id="venuesContainer" class="container-fluid">
 
-			<h1 ng-show="vm.searching" class="text-center">
+			<h1 ng-show="vm.searching" class="text-center" ng-cloak>
 				<span><i class="glyphicon glyphicon-refresh spinning"></i></span>
 			</h1>
 
@@ -73,9 +71,9 @@
 
 		</div>
 
-		<div ng-show="vm.venues[0]" class="container-fluid text-center">
+		<div ng-show="vm.venues[0]" class="container-fluid text-center" ng-cloak>
 			<span class="limits">
-				<ul class="pagination" ng-cloak>
+				<ul class="pagination">
 					<li ng-repeat="limit in vm.limits" ng-class="{active : vm.limit === limit}" ng-click="vm.setLimit(limit)"><a href="">{{limit}}</a></li>
 				</ul>
 			</span>
