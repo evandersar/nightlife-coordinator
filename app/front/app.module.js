@@ -22,6 +22,7 @@
         vm.getVenues = getVenues;
         vm.updateVenue = updateVenue;
         vm.pageChanged = pageChanged;
+        vm.setLimit = setLimit;
 
         vm.errMsg = '';
         vm.authSuccMsg = '';
@@ -36,27 +37,36 @@
             current: 1
         };
         vm.previousCity = '';
+        vm.limits = [10, 20, 50];
+
+        function resetPagination() {
+            vm.offset = 0;
+            vm.pagination.current = 1;
+        }
+
+        function setLimit(limit) {
+            vm.limit = limit;
+            resetPagination();
+            getVenues();
+        }
 
         function pageChanged(newPage) {
             vm.offset = (newPage - 1) * vm.limit;
-            
+
             if (vm.previousCity === vm.city) {
                 getVenues();
             }
-            else{
+            else {
                 vm.city = vm.previousCity;
                 getVenues();
             }
         }
 
         function getVenues() {
-            if (vm.previousCity !== vm.city) {
-                vm.offset = 0;
-                vm.pagination.current = 1;
-            }
+            if (vm.previousCity !== vm.city) resetPagination();
             vm.previousCity = vm.city;
             vm.venues = [];
-            
+
             if (!vm.city) {
                 vm.errMsg = 'Please type your city';
                 $(".city-err").show();
